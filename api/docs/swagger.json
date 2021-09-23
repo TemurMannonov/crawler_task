@@ -82,7 +82,7 @@
                 }
             }
         },
-        "models.Error": {
+        "models.ResponseError": {
             "type": "object",
             "properties": {
                 "code": {
@@ -90,14 +90,6 @@
                 },
                 "message": {
                     "type": "string"
-                }
-            }
-        },
-        "models.ResponseError": {
-            "type": "object",
-            "properties": {
-                "error": {
-                    "$ref": "#/definitions/models.Error"
                 }
             }
         },

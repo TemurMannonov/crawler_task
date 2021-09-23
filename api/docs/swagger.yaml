@@ -15,17 +15,12 @@ definitions:
       successfull_calls:
         type: integer
     type: object
-  models.Error:
+  models.ResponseError:
     properties:
       code:
         type: integer
       message:
         type: string
-    type: object
-  models.ResponseError:
-    properties:
-      error:
-        $ref: '#/definitions/models.Error'
     type: object
   models.Result:
     properties:

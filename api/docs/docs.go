@@ -102,7 +102,7 @@ var doc = `{
                 }
             }
         },
-        "models.Error": {
+        "models.ResponseError": {
             "type": "object",
             "properties": {
                 "code": {
@@ -110,14 +110,6 @@ var doc = `{
                 },
                 "message": {
                     "type": "string"
-                }
-            }
-        },
-        "models.ResponseError": {
-            "type": "object",
-            "properties": {
-                "error": {
-                    "$ref": "#/definitions/models.Error"
                 }
             }
         },
