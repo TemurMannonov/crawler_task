@@ -1,0 +1,72 @@
+definitions:
+  models.CrawlerRequest:
+    properties:
+      workers:
+        type: integer
+    type: object
+  models.CrawlerResponse:
+    properties:
+      failed_calls:
+        type: integer
+      results:
+        items:
+          $ref: '#/definitions/models.Result'
+        type: array
+      successfull_calls:
+        type: integer
+    type: object
+  models.Error:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+    type: object
+  models.ResponseError:
+    properties:
+      error:
+        $ref: '#/definitions/models.Error'
+    type: object
+  models.Result:
+    properties:
+      title:
+        type: string
+      url:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /v1/crawler:
+    post:
+      consumes:
+      - application/json
+      description: API for requesting crawler
+      parameters:
+      - description: input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.CrawlerRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.CrawlerResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Crawler
+      tags:
+      - crawler
+swagger: "2.0"
