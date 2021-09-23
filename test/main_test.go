@@ -42,6 +42,10 @@ func PerformRequest(method, path string, req, res interface{}, headers ...header
 	}
 
 	request := httptest.NewRequest(method, path, bytes.NewBuffer(body))
+
+	request.Header.Set("Content-Type", "application/json")
+	request.Header.Set("Accept", "application/json")
+
 	for _, h := range headers {
 		request.Header.Add(h.Key, h.Value)
 	}

@@ -53,6 +53,7 @@ func (h *handlerV1) Crawler(c *gin.Context) {
 			Code:    http.StatusBadRequest,
 			Message: "Workers count should be between 1 and 4.",
 		})
+		return
 	}
 
 	wp := workerpool.NewWorkerPool(request.Workers)
@@ -61,6 +62,7 @@ func (h *handlerV1) Crawler(c *gin.Context) {
 	resultC := make(chan Result, len(urls))
 	for _, val := range urls {
 		url := val
+
 		wp.AddTask(func() {
 			title, err := getTitleFromUrl(url)
 			resultC <- Result{url, title, err}
