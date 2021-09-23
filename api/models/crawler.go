@@ -9,6 +9,12 @@ type Result struct {
 	Title string
 }
 
+type Result3 struct {
+	Title        string
+	FailCount    uint64
+	SuccessCount uint64
+}
+
 type CrawlerResponse struct {
 	SuccessfullCalls int      `json:"successfull_calls"`
 	FailedCalls      int      `json:"failed_calls"`

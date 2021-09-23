@@ -4,19 +4,20 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-
-	"github.com/TemurMannonov/crawler_task/api/models"
-	workerpool "github.com/TemurMannonov/crawler_task/pkg/worker_pool"
+	"sync"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/TemurMannonov/crawler_task/api/models"
+
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
-type Result struct {
-	Url   string
-	Title string
-	Error error
+type Data struct {
+	Url string `json:"url"`
 }
+
+var data2 map[string][]models.Result = make(map[string][]models.Result)
 
 //@Security ApiKeyAuth
 //@Router /v1/crawler [post]
@@ -37,8 +38,8 @@ func (h *handlerV1) Crawler(c *gin.Context) {
 			"https://www.result.si/kariera/",
 			"https://www.result.si/blog/",
 		}
-		request  models.CrawlerRequest
-		response models.CrawlerResponse
+		request                       models.CrawlerRequest
+		successfullCalls, failedCalls int
 	)
 
 	h.log.Info("Crawler request")
@@ -56,34 +57,57 @@ func (h *handlerV1) Crawler(c *gin.Context) {
 		return
 	}
 
-	wp := workerpool.NewWorkerPool(request.Workers)
-	wp.Run()
+	id, _ := uuid.NewRandom()
+	requestID := id.String()
 
-	resultC := make(chan Result, len(urls))
-	for _, val := range urls {
-		url := val
+	jobsCount := len(urls)
 
-		wp.AddTask(func() {
-			title, err := getTitleFromUrl(url)
-			resultC <- Result{url, title, err}
-		})
+	jobs := make(chan Data, jobsCount)
+	errors := make(chan error, jobsCount)
+
+	for k := 1; k <= request.Workers; k++ {
+		go worker(jobs, errors, requestID)
 	}
 
-	for i := 0; i < len(urls); i++ {
-		res := <-resultC
-		if res.Error == nil {
-			response.SuccessfullCalls++
+	for _, v := range urls {
+		jobs <- Data{v}
+	}
+	close(jobs)
+
+	for i := 0; i < jobsCount; i++ {
+		err := <-errors
+		if err == nil {
+			successfullCalls++
 		} else {
-			response.FailedCalls++
+			failedCalls++
 		}
-
-		response.Results = append(response.Results, models.Result{
-			Title: res.Title,
-			Url:   res.Url,
-		})
 	}
+	close(errors)
 
-	c.JSON(http.StatusOK, response)
+	c.JSON(http.StatusOK, models.CrawlerResponse{
+		SuccessfullCalls: successfullCalls,
+		FailedCalls:      failedCalls,
+		Results:          data2[requestID],
+	})
+}
+
+func worker(jobs <-chan Data, errors chan<- error, id string) {
+	var mu sync.Mutex
+
+	for v := range jobs {
+		title, err := getTitleFromUrl(v.Url)
+
+		mu.Lock()
+
+		data2[id] = append(data2[id], models.Result{
+			Title: title,
+			Url:   v.Url,
+		})
+
+		mu.Unlock()
+
+		errors <- err
+	}
 }
 
 func getTitleFromUrl(url string) (string, error) {
