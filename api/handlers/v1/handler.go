@@ -5,9 +5,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"crawler_task/api/models"
-	"crawler_task/config"
-	"crawler_task/pkg/logger"
+	"github.com/TemurMannonov/crawler_task/api/models"
+	"github.com/TemurMannonov/crawler_task/config"
+	"github.com/TemurMannonov/crawler_task/pkg/logger"
 )
 
 type handlerV1 struct {

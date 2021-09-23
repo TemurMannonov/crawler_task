@@ -7,9 +7,9 @@ import (
 	"os"
 	"testing"
 
-	"crawler_task/api"
-	"crawler_task/config"
-	"crawler_task/pkg/logger"
+	"github.com/TemurMannonov/crawler_task/api"
+	"github.com/TemurMannonov/crawler_task/config"
+	"github.com/TemurMannonov/crawler_task/pkg/logger"
 
 	"github.com/gin-gonic/gin"
 )

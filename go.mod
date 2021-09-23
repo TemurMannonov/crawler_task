@@ -1,4 +1,4 @@
-module crawler_task
+module github.com/TemurMannonov/crawler_task
 
 go 1.16
 

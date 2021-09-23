@@ -7,11 +7,11 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
-	_ "crawler_task/api/docs"
-	v1 "crawler_task/api/handlers/v1"
-	"crawler_task/config"
+	_ "github.com/TemurMannonov/crawler_task/api/docs"
+	v1 "github.com/TemurMannonov/crawler_task/api/handlers/v1"
+	"github.com/TemurMannonov/crawler_task/config"
 
-	"crawler_task/pkg/logger"
+	"github.com/TemurMannonov/crawler_task/pkg/logger"
 )
 
 // Config ...

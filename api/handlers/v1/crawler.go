@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"crawler_task/api/models"
-	workerpool "crawler_task/pkg/worker_pool"
+	"github.com/TemurMannonov/crawler_task/api/models"
+	workerpool "github.com/TemurMannonov/crawler_task/pkg/worker_pool"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gin-gonic/gin"

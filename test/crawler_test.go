@@ -1,9 +1,10 @@
 package test
 
 import (
-	"crawler_task/api/models"
 	"net/http"
 	"testing"
+
+	"github.com/TemurMannonov/crawler_task/api/models"
 
 	"github.com/stretchr/testify/assert"
 )
